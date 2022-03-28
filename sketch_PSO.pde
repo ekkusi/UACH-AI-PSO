@@ -28,13 +28,13 @@ class Particle{
   float Eval(PImage surf){ //recibe imagen que define función de fitness
     evals++;
     color c=surf.get(int(x),int(y)); // obtiene color de la imagen en posición (x,y)
-    fit = red(c); //evalúa por el valor de la componente roja de la imagen
-    if(fit > pfit){ // actualiza local best si es mejor
+    fit = evalPos(); //evalúa por el valor de la componente roja de la imagen
+    if(fit < pfit){ // actualiza local best si es mejor
       pfit = fit;
       px = x;
       py = y;
     }
-    if (fit > gbest){ // actualiza global best
+    if (fit < gbest){ // actualiza global best
       gbest = fit;
       gbestx = x;
       gbesty = y;
@@ -42,6 +42,14 @@ class Particle{
       println(str(gbest));
     };
     return fit; //retorna la componente roja
+  }
+  
+  float evalPos() {
+    return 10*2+calculate(vx)+calculate(vy);
+  }
+  
+  float calculate(float val) {
+     return pow(val, 2) - 10 * cos(2*PI*val); 
   }
   
   // ------------------------------ mueve la partícula
