@@ -107,7 +107,7 @@ void setup(){
   //surf = loadImage("marscyl2.jpg");
   
   size(1024,512); //setea width y height (de acuerdo al tamaño de la imagen)
-  surf = loadImage("Moon_LRO_LOLA_global_LDEM_1024_b.jpg");
+  surf = loadImage("../Moon_LRO_LOLA_global_LDEM_1024_b.jpg");
   
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   smooth();
