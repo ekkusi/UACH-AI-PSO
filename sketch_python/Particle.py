@@ -1,20 +1,27 @@
+import sys
 import numpy as np
 from config import *
 
 class Particle:
-  g_best = 100000
-  g_best_x = np.random.uniform(RASTRIGIN_MIN, RASTRIGIN_MAX)
+  g_best = sys.float_info.max # Global best fit, init to max to reset at first fit
+  # Global best pos
+  g_best_x = np.random.uniform(RASTRIGIN_MIN, RASTRIGIN_MAX) 
   g_best_y = np.random.uniform(RASTRIGIN_MIN, RASTRIGIN_MAX)
 
   #  ---------------------------- Constructor
   def __init__(self):
+    # Current pos
     self.x = np.random.uniform(RASTRIGIN_MIN, RASTRIGIN_MAX)   
     self.y = np.random.uniform(RASTRIGIN_MIN, RASTRIGIN_MAX)   
-    self.py = np.random.uniform(RASTRIGIN_MIN, RASTRIGIN_MAX)   
+    # Personal best pos
+    self.py = np.random.uniform(RASTRIGIN_MIN, RASTRIGIN_MAX)
     self.px = np.random.uniform(RASTRIGIN_MIN, RASTRIGIN_MAX)   
+    # Current velocity
     self.vx = np.random.uniform(-1,1)
     self.vy = np.random.uniform(-1,1)
+    # Personal best fit
     self.pfit = 100000
+    # Current fit
     self.fit = 100000
   
   
@@ -41,16 +48,18 @@ class Particle:
   
   # ------------------------------ mueve la partícula
   def move(self):
-    #actualiza velocidad (fórmula con factores de aprendizaje C1 y C2)
-    #vx = vx + random(0,1)*C1*(px - x) + random(0,1)*C2*(gbestx - x)
-    #vy = vy + random(0,1)*C1*(py - y) + random(0,1)*C2*(gbesty - y)
-    #actualiza velocidad (fórmula con inercia, p.250)
-    random = np.random
-    self.vx = INERCIA * self.vx + random.randint(1)*(self.px - self.x) + random.randint(1)*(Particle.g_best_x - self.x)
-    self.vy = INERCIA * self.vy + random.randint(1)*(self.py - self.y) + random.randint(1)*(Particle.g_best_y - self.y)
-    #actualiza velocidad (fórmula mezclada)
-    #vx = w * vx + random(0,1)*C1*(px - x) + random(0,1)*C2*(gbestx - x)
-    #vy = w * vy + random(0,1)*C1*(py - y) + random(0,1)*C2*(gbesty - y)
+    rand = np.random
+    # === Actualiza velocidad (fórmula con factores de aprendizaje C1 y C2) ===
+    # self.vx = self.vx + rand.uniform(0,1)*C1*(self.px - self.x) + rand.uniform(0,1)*C2*(Particle.g_best_x - self.x)
+    # self.vy = self.vy + rand.uniform(0,1)*C1*(self.py - self.y) + rand.uniform(0,1)*C2*(Particle.g_best_y - self.y)
+
+    # === Actualiza velocidad (fórmula con inercia, p.250) ===
+    # self.vx = INERCIA * self.vx + rand.uniform(0,1)*(self.px - self.x) + rand.uniform(0,1)*(Particle.g_best_x - self.x)
+    # self.vy = INERCIA * self.vy + rand.uniform(0,1)*(self.py - self.y) + rand.uniform(0,1)*(Particle.g_best_y - self.y)
+
+    # ==== Actualiza velocidad (fórmula mezclada) ====
+    self.vx = INERCIA * self.vx + rand.uniform(0,1)*C1*(self.px - self.x) + rand.uniform(0,1)*C2*(Particle.g_best_x - self.x)
+    self.vy = INERCIA * self.vy + rand.uniform(0,1)*C1*(self.py - self.y) + rand.uniform(0,1)*C2*(Particle.g_best_y - self.y)
     # trunca velocidad a maxv
     modu = np.sqrt(self.vx*self.vx + self.vy*self.vy)
     if (modu > MAX_V):
