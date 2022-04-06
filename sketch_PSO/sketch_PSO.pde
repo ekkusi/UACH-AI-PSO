@@ -5,8 +5,10 @@ PImage surf; // imagen que entrega el fitness
 // ===============================================================
 int puntos = 100;
 Particle[] fl; // arreglo de partículas
+float RASTR_MIN = -5.12;
+float RASTR_MAX = 5.12;
 float d = 15; // radio del círculo, solo para despliegue
-float gbestx, gbesty, gbest; // posición y fitness del mejor global
+float gbestx = random(RASTR_MIN, RASTR_MAX) * 100, gbesty = 100*random(RASTR_MIN, RASTR_MAX), gbest = 1000000; // posición y fitness del mejor global
 float w = 100; // inercia: baja (~50): explotación, alta (~5000): exploración (2000 ok)
 float C1 = 30, C2 =  10; // learning factors (C1: own, C2: social) (ok)
 int evals = 0, evals_to_best = 0; //número de evaluaciones, sólo para despliegue
@@ -19,7 +21,7 @@ class Particle{
   
   // ---------------------------- Constructor
   Particle(){
-    x = random (-5.12,5.12); y = random(-5.12,5.12);
+    x = random (RASTR_MIN,RASTR_MAX); y = random(RASTR_MIN,RASTR_MAX);
     vx = random(-0.05,0.05) ; vy = random(-0.05,0.05);
     pfit = -1; fit = -1; //asumiendo que no hay valores menores a -1 en la función de evaluación
   }
@@ -112,7 +114,7 @@ void setup(){
 void draw(){
   //background(200);
   //despliega mapa, posiciones  y otros
-  image(surf,0,0);
+  image(surf,0,0); //<>//
   for(int i = 0;i<puntos;i++){
     fl[i].display();
   }
