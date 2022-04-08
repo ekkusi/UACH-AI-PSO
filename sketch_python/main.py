@@ -14,11 +14,11 @@ rand = np.random
 # evals_to_best = 0 #número de evaluaciones, sólo para despliegue
 
 # ==== MODE ====
-is_pso = False # True for PSO, False for GA
+is_pso = True # True for PSO, False for GA
 # ==============
 
 particles = []
-# For example with 4% MUTATION_PERCENTAGE this gives random range of (0.98, 1.02)
+# For example with 60% MUTATION_PERCENTAGE this gives random range of (0.7, 1.3)
 ga_mutation_bottom = 1 - (MUTATION_PERCENTAGE / 100 / 2)
 ga_mutation_top = 1 + (MUTATION_PERCENTAGE / 100 / 2)
 
@@ -54,12 +54,10 @@ def setup():
     start_x = rand.uniform(RASTRIGIN_MIN, RASTRIGIN_MAX)   
     start_y = rand.uniform(RASTRIGIN_MIN, RASTRIGIN_MAX)   
     particle = Particle(start_x, start_y)
-    # Current pos
     particles.append(particle)
     particle.eval()
 
   plt.draw()
-  # plt.savefig('rastrigin_graph.png')
 
 def draw_best():
   ax.plot(Particle.g_best_x, Particle.g_best_y, 100, marker="x", markersize=10, markerfacecolor="white", markeredgecolor="white", zorder=101)
@@ -77,6 +75,7 @@ while True:
   # Delete old point graphics
   for i,line in enumerate(ax.get_lines()):
     line.remove()
+
   # PSO simulation
   if (is_pso):
     # Move points, eval and draw to new locations
@@ -86,7 +85,6 @@ while True:
       draw_particle(particles[i])
   # GA simulation
   else:
-    # TODO:
     # 1. Sort particles by best fits
     particles.sort(key=lambda x: x.fit)
     best_particles = particles[:BEST_PARTICLES_AMOUNT]
@@ -108,11 +106,13 @@ while True:
       new_y = rand.choice(best_y_genes) * rand.uniform(ga_mutation_bottom, ga_mutation_top) + (rand.uniform(-1, 1) * RANDOM_WEIGHT)
 
       new_particle = Particle(new_x, new_y)
+    # 4. Eval new particles
       new_particle.eval()
       particles.append(new_particle)
-      draw_particle(new_particle)
-    # 4. Eval new particles
     # 5. Draw new particles
+      draw_particle(new_particle)
+    
+  # TODO: Objective function, when to stop?
       
   # Draw new (or same) best
   draw_best()

@@ -39,8 +39,8 @@ class Particle:
   
   
   def evalPos(self): 
-    return abs((self.x**2 - 10 * np.cos(2 * np.pi * self.x)) + \
-  (self.y**2 - 10 * np.cos(2 * np.pi * self.y)) + 20)
+    return (self.x**2 - 10 * np.cos(2 * np.pi * self.x)) + \
+  (self.y**2 - 10 * np.cos(2 * np.pi * self.y)) + 20
   
   # def calculate(self, val):
   #   return pow(val, 2) - 10 * np.cos(2*PI*val) 
@@ -74,18 +74,3 @@ class Particle:
     if (temp_new_y > RASTRIGIN_MAX or  temp_new_y< RASTRIGIN_MIN): self.vy = - self.vy
     self.x = self.x + self.vx
     self.y = self.y + self.vy
-
-def move_ga():
-  # TODO: Move GA calculation
-  terve = False
-  
-  # ------------------------------ despliega partícula
-  # void display(){
-  #   color c=surf.get(int(x),int(y)) 
-  #   fill(c)
-  #   ellipse (x,y,d,d)
-  #   # dibuja vector
-  #   stroke(#ff0000)
-  #   line(x,y,x-10*vx,y-10*vy)
-  # }
- #fin de la definición de la clase Particle
