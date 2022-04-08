@@ -9,10 +9,10 @@ class Particle:
   g_best_y = np.random.uniform(RASTRIGIN_MIN, RASTRIGIN_MAX)
 
   #  ---------------------------- Constructor
-  def __init__(self):
+  def __init__(self, x, y):
     # Current pos
-    self.x = np.random.uniform(RASTRIGIN_MIN, RASTRIGIN_MAX)   
-    self.y = np.random.uniform(RASTRIGIN_MIN, RASTRIGIN_MAX)   
+    self.x = x
+    self.y = y
     # Personal best pos
     self.py = np.random.uniform(RASTRIGIN_MIN, RASTRIGIN_MAX)
     self.px = np.random.uniform(RASTRIGIN_MIN, RASTRIGIN_MAX)   
@@ -39,15 +39,15 @@ class Particle:
   
   
   def evalPos(self): 
-    return (self.x**2 - 10 * np.cos(2 * np.pi * self.x)) + \
-  (self.y**2 - 10 * np.cos(2 * np.pi * self.y)) + 20
+    return abs((self.x**2 - 10 * np.cos(2 * np.pi * self.x)) + \
+  (self.y**2 - 10 * np.cos(2 * np.pi * self.y)) + 20)
   
   # def calculate(self, val):
   #   return pow(val, 2) - 10 * np.cos(2*PI*val) 
   
   
   # ------------------------------ mueve la partícula
-  def move(self):
+  def move_pso(self):
     rand = np.random
     # === Actualiza velocidad (fórmula con factores de aprendizaje C1 y C2) ===
     # self.vx = self.vx + rand.uniform(0,1)*C1*(self.px - self.x) + rand.uniform(0,1)*C2*(Particle.g_best_x - self.x)
@@ -74,6 +74,10 @@ class Particle:
     if (temp_new_y > RASTRIGIN_MAX or  temp_new_y< RASTRIGIN_MIN): self.vy = - self.vy
     self.x = self.x + self.vx
     self.y = self.y + self.vy
+
+def move_ga():
+  # TODO: Move GA calculation
+  terve = False
   
   # ------------------------------ despliega partícula
   # void display(){
