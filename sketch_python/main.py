@@ -100,7 +100,7 @@ for round in range(MAX_RUNS):
     for p in best_particles:
       best_x_genes.append(p.x)
       best_y_genes.append(p.y)
-      # Add best particles to new generation as parents
+      # Add best particles (parents) to compete for new generation by default
       particles.append(p)
 
     # 3. Cross new particles from the parents x and y, after we have BEST_PARTICLES_AMOUNT + PARTICLES_AMOUNT particles
