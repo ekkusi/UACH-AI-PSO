@@ -89,7 +89,7 @@ for round in range(MAX_RUNS):
   # GA simulation
   else:
     # 1. Sort particles by best fits and select BEST_PARTICLES_AMOUNT of the best as parents to next gen
-    # TODO?: Take parents from all parents but with probability of being selected determined by fit. Could use random-library choices method.
+    # TODO?: Select parents from all particles but with a weighted probability of being selected determined by fit. Could use random-library choices method.
     particles.sort(key=lambda x: x.fit)
     best_particles = particles[:BEST_PARTICLES_AMOUNT]
     particles = [] # Delete old gene
