@@ -25,7 +25,7 @@ class Particle:
     self.fit = 100000
   
   
-  # ---------------------------- Evalúa partícula
+  # Evaluate fit, if new global best is found, return True
   def eval(self): #recibe imagen que define función de fitness
     self.fit = self.evalPos() #evalúa por el valor de la componente roja de la imagen
     if(self.fit < self.pfit): # actualiza local best si es mejor
@@ -36,6 +36,8 @@ class Particle:
       Particle.g_best = self.fit
       Particle.g_best_x = self.x
       Particle.g_best_y = self.y
+      return True
+    return False
   
   
   def evalPos(self): 

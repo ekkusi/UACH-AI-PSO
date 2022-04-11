@@ -19,11 +19,13 @@ is_pso = True # True for PSO, False for GA
 
 particles = []
 # For example with 60% MUTATION_PERCENTAGE this gives random range of (0.7, 1.3)
-ga_mutation_bottom = 1 - (MUTATION_PERCENTAGE / 100 / 2)
-ga_mutation_top = 1 + (MUTATION_PERCENTAGE / 100 / 2)
+ga_mutation_bottom = 1 - (MUTATION_RANGE_PERCENTAGE / 100 / 2)
+ga_mutation_top = 1 + (MUTATION_RANGE_PERCENTAGE / 100 / 2)
 
 fig = plt.figure() 
 ax = fig.gca(projection="3d")
+
+evals_to_best = 0
 
 # Stop program hanging after pressing esc
 def on_close(event):
@@ -69,52 +71,68 @@ setup()
 
 
 # Main loop
-while True:
+for round in range(MAX_RUNS):
   plt.draw()
-  print("WHILE LOOP, is_pso: " + str(is_pso))
+  print("ROUND: %d, best fit: %d, rounds to best: %d", round, Particle.g_best, evals_to_best)
   # Delete old point graphics
   for i,line in enumerate(ax.get_lines()):
     line.remove()
 
   # PSO simulation
-  if (is_pso):
+  if is_pso:
     # Move points, eval and draw to new locations
     for i in range(len(particles)):
       particles[i].move_pso()
-      particles[i].eval()
+      if particles[i].eval(): # If eval returns true, new global best is found
+        evals_to_best = round
       draw_particle(particles[i])
   # GA simulation
   else:
-    # 1. Sort particles by best fits
+    # 1. Sort particles by best fits and select BEST_PARTICLES_AMOUNT of the best as parents to next gen
     particles.sort(key=lambda x: x.fit)
     best_particles = particles[:BEST_PARTICLES_AMOUNT]
-    bp = best_particles[0]
-    print("Best particle x: %d, y: %d, fit: %d", bp.x, bp.y, bp.fit)
-    # Delete old particles
-    particles = []
+    particles = [] # Delete old gene
+
     # 2. Take genes (which genes?) of x best particles
     best_x_genes = []
     best_y_genes = []
     for p in best_particles:
       best_x_genes.append(p.x)
       best_y_genes.append(p.y)
+      # Add best particles to new generation as parents
+      particles.append(p)
 
-    # 3. Generate new particles from these genes, add random mutation
+    # 3. Cross new particles from the parents x and y, after we have BEST_PARTICLES_AMOUNT + PARTICLES_AMOUNT particles
     for i in range(PARTICLES_AMOUNT):
-      # Select new genes by random from best genes and mutate these genes
-      new_x = rand.choice(best_x_genes) * rand.uniform(ga_mutation_bottom, ga_mutation_top) + (rand.uniform(-1, 1) * RANDOM_WEIGHT)
-      new_y = rand.choice(best_y_genes) * rand.uniform(ga_mutation_bottom, ga_mutation_top) + (rand.uniform(-1, 1) * RANDOM_WEIGHT)
-
+      # Select new genes by random from best genes 
+      new_x = rand.choice(best_x_genes) 
+      new_y = rand.choice(best_y_genes) 
+    
       new_particle = Particle(new_x, new_y)
-    # 4. Eval new particles
-      new_particle.eval()
       particles.append(new_particle)
-    # 5. Draw new particles
-      draw_particle(new_particle)
+
+    # 4. Mutation for all particles, children and old generation parents and evaluate after
+    for p in particles:
+      if rand.uniform(0,1) < CHANCE_TO_MUTATE_PERCENTAGE / 100:
+        # Mutation == Add random number from the range  {-RANDOM_WEIGHT, RANDOM_WEIGHT} * to both x and y
+        p.x = p.x + (rand.uniform(-1, 1) * RANDOM_WEIGHT) 
+        p.y = p.y + (rand.uniform(-1, 1) * RANDOM_WEIGHT)
+      if p.eval():
+        evals_to_best = round
+    
+    # 5. Evolution, compete all crossed and mutated particles (children and old gen parents) and let only the fittest survive
+    particles.sort(key=lambda x: x.fit)
+    particles = particles[:PARTICLES_AMOUNT]
+    # 6. Draw new particles
+    for p in particles:
+      draw_particle(p)
+
     
   # TODO: Objective function, when to stop?
       
   # Draw new (or same) best
   draw_best()
-  plt.pause(0.01)
+  plt.pause(0.001)
 
+print("Simulation over, global best: %d, found in %d rounds", Particle.g_best, evals_to_best)
+quit()
