@@ -15,6 +15,7 @@ rand = np.random
 
 # ==== MODE ====
 is_pso = True # True for PSO, False for GA
+with_graphics = True
 # ==============
 
 particles = []
@@ -22,16 +23,20 @@ particles = []
 ga_mutation_bottom = 1 - (MUTATION_RANGE_PERCENTAGE / 100 / 2)
 ga_mutation_top = 1 + (MUTATION_RANGE_PERCENTAGE / 100 / 2)
 
-fig = plt.figure() 
-ax = fig.gca(projection="3d")
-
 evals_to_best = 0
 
 # Stop program hanging after pressing esc
 def on_close(event):
   quit()
 
-fig.canvas.mpl_connect('close_event', on_close)
+fig = None
+ax = None
+if with_graphics:
+  fig = plt.figure() 
+  ax = fig.gca(projection="3d")
+  fig.canvas.mpl_connect('close_event', on_close)
+
+
 
 # Setup Rastrigin plot, initialize particles
 def setup():
@@ -39,19 +44,6 @@ def setup():
     print("PARTICLES_AMOUNT is lower than BEST_PARTICLES_AMOUNT, change your config. Quitting.")
     quit()
   print("Starting simulation in " + ("PSO" if is_pso == True else "GA"))
-  X = np.linspace(-5.12, 5.12, 100)     
-  Y = np.linspace(-5.12, 5.12, 100)     
-  X, Y = np.meshgrid(X, Y) 
-
-  Z = (X**2 - 10 * np.cos(2 * np.pi * X)) + \
-    (Y**2 - 10 * np.cos(2 * np.pi * Y)) + 20
-  
-  ax.plot_surface(X, Y, Z, rstride=1, cstride=1,
-    cmap=cm.nipy_spectral, linewidth=0.08,
-    antialiased=True) 
-
-  ax.view_init(elev=90)
-  
   for i in range(PARTICLES_AMOUNT):
     start_x = rand.uniform(RASTRIGIN_MIN, RASTRIGIN_MAX)   
     start_y = rand.uniform(RASTRIGIN_MIN, RASTRIGIN_MAX)   
@@ -59,7 +51,23 @@ def setup():
     particles.append(particle)
     particle.eval()
 
-  plt.draw()
+  if with_graphics:
+    X = np.linspace(-5.12, 5.12, 100)     
+    Y = np.linspace(-5.12, 5.12, 100)     
+    X, Y = np.meshgrid(X, Y) 
+
+    Z = (X**2 - 10 * np.cos(2 * np.pi * X)) + \
+      (Y**2 - 10 * np.cos(2 * np.pi * Y)) + 20
+    
+    ax.plot_surface(X, Y, Z, rstride=1, cstride=1,
+      cmap=cm.nipy_spectral, linewidth=0.08,
+      antialiased=True) 
+
+    ax.view_init(elev=90)
+
+    plt.draw()
+  
+
 
 def draw_best():
   ax.plot(Particle.g_best_x, Particle.g_best_y, 100, marker="x", markersize=10, markerfacecolor="white", markeredgecolor="white", zorder=101)
@@ -71,12 +79,12 @@ setup()
 
 
 # Main loop
-for round in range(MAX_RUNS):
-  plt.draw()
-  print("ROUND: %d, best fit: %d, rounds to best: %d", round, Particle.g_best, evals_to_best)
-  # Delete old point graphics
-  for i,line in enumerate(ax.get_lines()):
-    line.remove()
+for round in range(RUNS_PER_SIMULATION):
+  if with_graphics:
+    plt.draw()
+    # Delete old point graphics
+    for i,line in enumerate(ax.get_lines()):
+      line.remove()
 
   # PSO simulation
   if is_pso:
@@ -85,7 +93,7 @@ for round in range(MAX_RUNS):
       particles[i].move_pso()
       if particles[i].eval(): # If eval returns true, new global best is found
         evals_to_best = round
-      draw_particle(particles[i])
+      if with_graphics: draw_particle(particles[i])
   # GA simulation
   else:
     # 1. Sort particles by best fits and select BEST_PARTICLES_AMOUNT of the best as parents to next gen
@@ -124,16 +132,21 @@ for round in range(MAX_RUNS):
     # 5. Evolution, compete all crossed and mutated particles (children and old gen parents) and let only the fittest survive
     particles.sort(key=lambda x: x.fit)
     particles = particles[:PARTICLES_AMOUNT]
-    # 6. Draw new particles
-    for p in particles:
-      draw_particle(p)
+
+    if with_graphics:
+      # 6. Draw new particles
+      for p in particles:
+        draw_particle(p)
 
     
   # TODO: Objective function, when to stop?
       
   # Draw new (or same) best
-  draw_best()
-  plt.pause(0.001)
+  if with_graphics:
+    draw_best()
+    plt.pause(0.001)
+
+  print("ROUND: %d, best fit: %d, rounds to best: %d", round, Particle.g_best, evals_to_best)
 
 print("Simulation over, global best: %d, found in %d rounds", Particle.g_best, evals_to_best)
 quit()
