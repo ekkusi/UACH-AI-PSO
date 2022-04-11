@@ -24,6 +24,14 @@ class Particle:
     # Current fit
     self.fit = 100000
   
+  @staticmethod
+  def reset_globals():
+    Particle.g_best = sys.float_info.max # Global best fit, init to max to reset at first fit
+    # Global best pos
+    Particle.g_best_x = np.random.uniform(RASTRIGIN_MIN, RASTRIGIN_MAX) 
+    Particle.g_best_y = np.random.uniform(RASTRIGIN_MIN, RASTRIGIN_MAX)
+    
+  
   
   # Evaluate fit, if new global best is found, return True
   def eval(self): #recibe imagen que define función de fitness

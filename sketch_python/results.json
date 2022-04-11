@@ -1,0 +1,105 @@
+{
+    "results": [
+        {
+            "mode": "EA",
+            "particles_amount": 100,
+            "runs_per_simulation": 500,
+            "parent_particles_amount": 10,
+            "change_to_mutate_percentage": 50,
+            "mutate_weight": 0.5,
+            "simulation_results": [
+                {
+                    "rounds_to_best": 482,
+                    "best_fit": 0.016790263810015915
+                },
+                {
+                    "rounds_to_best": 464,
+                    "best_fit": 0.9949855618123706
+                },
+                {
+                    "rounds_to_best": 442,
+                    "best_fit": 0.9959059675511313
+                },
+                {
+                    "rounds_to_best": 231,
+                    "best_fit": 0.9957494232534287
+                },
+                {
+                    "rounds_to_best": 134,
+                    "best_fit": 0.0006164388944469579
+                },
+                {
+                    "rounds_to_best": 288,
+                    "best_fit": 0.0009204412618970537
+                },
+                {
+                    "rounds_to_best": 481,
+                    "best_fit": 0.009704541598750893
+                },
+                {
+                    "rounds_to_best": 322,
+                    "best_fit": 0.9949599677094056
+                },
+                {
+                    "rounds_to_best": 197,
+                    "best_fit": 0.9968299493451767
+                },
+                {
+                    "rounds_to_best": 417,
+                    "best_fit": 0.0002636609565804804
+                }
+            ]
+        },
+        {
+            "mode": "PSO",
+            "particles_amount": 100,
+            "runs_per_simulation": 500,
+            "inercia": 20,
+            "max_v": 0.5,
+            "c1": 10,
+            "c2": 30,
+            "simulation_results": [
+                {
+                    "rounds_to_best": 473,
+                    "best_fit": 0.0005699970071937344
+                },
+                {
+                    "rounds_to_best": 408,
+                    "best_fit": 0.0032318448863222216
+                },
+                {
+                    "rounds_to_best": 479,
+                    "best_fit": 0.003846789385782756
+                },
+                {
+                    "rounds_to_best": 396,
+                    "best_fit": 0.005297471433173939
+                },
+                {
+                    "rounds_to_best": 236,
+                    "best_fit": 0.0035062432099266516
+                },
+                {
+                    "rounds_to_best": 125,
+                    "best_fit": 0.0010801365950285913
+                },
+                {
+                    "rounds_to_best": 217,
+                    "best_fit": 0.005067842586392146
+                },
+                {
+                    "rounds_to_best": 20,
+                    "best_fit": 0.006983713548443404
+                },
+                {
+                    "rounds_to_best": 208,
+                    "best_fit": 0.004870940231963772
+                },
+                {
+                    "rounds_to_best": 404,
+                    "best_fit": 0.0010779004494771982
+                }
+            ]
+        }
+    ]
+}
