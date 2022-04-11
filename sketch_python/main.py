@@ -15,7 +15,7 @@ rand = np.random
 
 # ==== MODE ====
 is_pso = True # True for PSO, False for GA
-with_graphics = True
+with_graphics = True # False for faster running of simulations, only prints
 # ==============
 
 particles = []
