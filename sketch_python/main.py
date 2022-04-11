@@ -1,11 +1,11 @@
+from hashlib import sha3_224
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import cm 
 from mpl_toolkits.mplot3d import Axes3D 
 from Particle import Particle
 from config import *
-
-rand = np.random
+import random as rand
 
 # NOT USED AT THE MOMENT
 # C1 = 10
@@ -14,14 +14,14 @@ rand = np.random
 # evals_to_best = 0 #número de evaluaciones, sólo para despliegue
 
 # ==== MODE ====
-is_pso = True # True for PSO, False for GA
+is_pso = False # True for PSO, False for GA
 with_graphics = True # False for faster running of simulations, only prints
 # ==============
 
 particles = []
 # For example with 60% MUTATION_PERCENTAGE this gives random range of (0.7, 1.3)
-ga_mutation_bottom = 1 - (MUTATION_RANGE_PERCENTAGE / 100 / 2)
-ga_mutation_top = 1 + (MUTATION_RANGE_PERCENTAGE / 100 / 2)
+# ga_mutation_bottom = 1 - (MUTATION_RANGE_PERCENTAGE / 100 / 2)
+# ga_mutation_top = 1 + (MUTATION_RANGE_PERCENTAGE / 100 / 2)
 
 evals_to_best = 0
 
@@ -96,11 +96,15 @@ for round in range(RUNS_PER_SIMULATION):
       if with_graphics: draw_particle(particles[i])
   # GA simulation
   else:
-    # 1. Sort particles by best fits and select BEST_PARTICLES_AMOUNT of the best as parents to next gen
-    # TODO?: Select parents from all particles but with a weighted probability of being selected determined by fit. Could use random-library choices method.
-    particles.sort(key=lambda x: x.fit)
-    best_particles = particles[:BEST_PARTICLES_AMOUNT]
+    # 1. Select next gen parents randomly from particles with probabilities of being selected being weighted by fit value
+    particle_fits = list(map(lambda p: 1/p.fit, particles))
+    best_particles = rand.choices(particles, weights=particle_fits, k=BEST_PARTICLES_AMOUNT)
+    particle_fits.sort()
+    best_particles.sort(key=lambda p: p.fit)
     particles = [] # Delete old gene
+
+    print("Best fits: " + ", ".join([str(p) for p in particle_fits]))
+    print("All: " + ", ".join([str(p.fit) for p in best_particles]))
 
     # 2. Take genes (which genes?) of x best particles
     best_x_genes = []
