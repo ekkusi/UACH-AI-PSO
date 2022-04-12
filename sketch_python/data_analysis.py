@@ -9,9 +9,10 @@ with open("results_ea.json") as json_file:
   for result in data["results"]:
     rounds_to_best_list = list(map(lambda r: r["rounds_to_best"], result["simulation_results"]))
     result["rounds_to_best_average"] = round(np.average(rounds_to_best_list))
+    result.pop("simulation_results", None)
   print("Data read")
   data = data["results"]
-with open("results_ea_fixed.json", "w") as outfile:
+with open("results_ea_to_csv.json", "w") as outfile:
   print("Writing data")
   json_string = json.dumps(data, indent=4)
   outfile.write(json_string)
