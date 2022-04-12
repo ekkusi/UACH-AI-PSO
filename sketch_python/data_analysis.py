@@ -2,16 +2,17 @@ import numpy as np
 import json
 
 data = None
-# Correct rounds_to_best_average values
+# Prepare data for csv convertion
 with open("results_ea.json") as json_file:
   print("Reading data")
   data = json.load(json_file)
-  for result in data["results"]:
-    rounds_to_best_list = list(map(lambda r: r["rounds_to_best"], result["simulation_results"]))
-    result["rounds_to_best_average"] = round(np.average(rounds_to_best_list))
+  for result in data:
+    # Make all fields to the same level, no nesting. Remove simulation results as this is not needed for table
+    result["best_fit"] = result["best_result"]["best_fit"]
+    result["rounds_to_best"] = result["best_result"]["rounds_to_best"]
     result.pop("simulation_results", None)
+    result.pop("best_result", None)
   print("Data read")
-  data = data["results"]
 with open("results_ea_to_csv.json", "w") as outfile:
   print("Writing data")
   json_string = json.dumps(data, indent=4)

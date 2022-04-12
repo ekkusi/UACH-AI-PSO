@@ -195,10 +195,11 @@ else:
   best_fits = list(map(lambda r: r["best_fit"], simulation_results))
   rounds_to_best_list = list(map(lambda r: r["rounds_to_best"], simulation_results))
   best_fit_average = np.average(best_fits)
-  rounds_to_best_average = np.rint(np.average(rounds_to_best_list))
+  rounds_to_best_average = round(np.average(rounds_to_best_list))
   result["best_fit_average"] = best_fit_average
-  result["rounds_to_best_average"] = best_fit_average
+  result["rounds_to_best_average"] = rounds_to_best_average
   result["simulation_results"] = simulation_results
+  result["best_result"] = simulation_results
 
   data = None
   with open(results_file_path) as json_file:
