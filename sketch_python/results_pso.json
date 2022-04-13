@@ -1,5 +1,4 @@
-{
-    "results": [
+[
         {
             "mode": "PSO",
             "particles_amount": 100,
@@ -913,4 +912,3 @@
             ]
         }
     ]
-}

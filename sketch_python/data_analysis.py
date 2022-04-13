@@ -3,7 +3,7 @@ import json
 
 data = None
 # Prepare data for csv convertion
-with open("results_ea.json") as json_file:
+with open("results_pso.json") as json_file:
   print("Reading data")
   data = json.load(json_file)
   for result in data:
@@ -13,7 +13,7 @@ with open("results_ea.json") as json_file:
     result.pop("simulation_results", None)
     result.pop("best_result", None)
   print("Data read")
-with open("results_ea_to_csv.json", "w") as outfile:
+with open("results_pso_to_csv.json", "w") as outfile:
   print("Writing data")
   json_string = json.dumps(data, indent=4)
   outfile.write(json_string)

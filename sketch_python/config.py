@@ -5,10 +5,10 @@ RASTRIGIN_MIN = -5.12
 RASTRIGIN_MAX = 5.12
 
 # PSO
-INERCIA = 20 # inercia: baja (~50): explotación, alta (~5000): exploración (2000 ok)
-MAX_V = 0.5 # max velocidad (modulo)
-C1 = 10 # learning factors (C1: own, C2: social)
-C2 = 30 
+MAX_V = 0.6 # max velocidad (modulo)
+INERCIA = 25 # inercia: baja (~50): explotación, alta (~5000): exploración (2000 ok)
+C1 = 25 # learning factors (C1: own, C2: social)
+C2 = 25
 
 # GA
 PARENT_PARTICLES_AMOUNT = 80 # Has to be lower than PARTICLES_AMOUNT

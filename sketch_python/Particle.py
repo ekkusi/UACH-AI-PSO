@@ -2,6 +2,8 @@ import sys
 import numpy as np
 from config import *
 
+rand = np.random
+
 class Particle:
   g_best = sys.float_info.max # Global best fit, init to max to reset at first fit
   # Global best pos
@@ -54,11 +56,19 @@ class Particle:
   
   # def calculate(self, val):
   #   return pow(val, 2) - 10 * np.cos(2*PI*val) 
+
+  # For testing
+  def print_next_move(self):
+    print("Inercia * self.vx == " + str(INERCIA * self.vx))
+    print("Inercia * self.vy == " + str(INERCIA * self.vy))
+    print("Rand * C1 * (self.px - self.x) == " + str(rand.uniform(0,1)*C1*(self.px - self.x)))
+    print("Rand * C1 * (self.py - self.y) == " +str(rand.uniform(0,1)*C1*(self.py - self.y)))
+    print("Rand * C2 * (self.px - self.x) == " +str(rand.uniform(0,1)*C2*(Particle.g_best_x - self.x)))
+    print("Rand * C2 * (self.py - self.y) == " +str(rand.uniform(0,1)*C2*(Particle.g_best_y - self.y)))
   
   
   # ------------------------------ mueve la partícula
   def move_pso(self):
-    rand = np.random
     # === Actualiza velocidad (fórmula con factores de aprendizaje C1 y C2) ===
     # self.vx = self.vx + rand.uniform(0,1)*C1*(self.px - self.x) + rand.uniform(0,1)*C2*(Particle.g_best_x - self.x)
     # self.vy = self.vy + rand.uniform(0,1)*C1*(self.py - self.y) + rand.uniform(0,1)*C2*(Particle.g_best_y - self.y)

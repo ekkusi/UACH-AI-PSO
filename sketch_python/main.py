@@ -18,7 +18,7 @@ results_file_path = os.path.join(script_dir, "results.json")
 # evals_to_best = 0 #número de evaluaciones, sólo para despliegue
 
 # ==== MODE ====
-is_pso = False # True for PSO, False for GA
+is_pso = True # True for PSO, False for GA
 with_graphics = False # False for faster running of simulations, only prints
 # ==============
 
@@ -187,7 +187,7 @@ else:
   best_result = None
   for i in range(10): # Change this value to change the numbers of simulations run per configuration
     sim_result = simulate()
-    if (best_result == None or best_result["best_fit"] < sim_result["best_fit"]): best_result = sim_result
+    if (best_result == None or best_result["best_fit"] > sim_result["best_fit"]): best_result = sim_result
     simulation_results.append(sim_result)
     setup() # Reset stuff after each simulation
     print("Simulation ", i, " complete, best fit found: " + str(sim_result["best_fit"])+ " in the round: " + str(sim_result["rounds_to_best"]))
@@ -198,8 +198,8 @@ else:
   rounds_to_best_average = round(np.average(rounds_to_best_list))
   result["best_fit_average"] = best_fit_average
   result["rounds_to_best_average"] = rounds_to_best_average
+  result["best_result"] = best_result
   result["simulation_results"] = simulation_results
-  result["best_result"] = simulation_results
 
   data = None
   with open(results_file_path) as json_file:
